@@ -3,12 +3,13 @@
  * module.exports.thing = 'a thing';
  *
  * You can import it from another modules like this:
- * var mod = require('upgrader');
+ * var mod = require('repairer');
  * mod.thing == 'a thing'; // true
  */
+var builder = require('builder');
 
 module.exports = {
-run: function(creep) {
+ run: function(creep) {
         if (creep.memory.working == true && creep.carry.energy == 0) {
             creep.memory.working = false;
         }
@@ -17,9 +18,16 @@ run: function(creep) {
         }
         
         if (creep.memory.working == true) {
-            if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(creep.room.controller);
-            }
+			var toRepair = creep.pos.findClosestByPath(FIND_STRUCTURES,
+				{ filter: (s) => s.hit < s.hitsMax && s.structureType != STUCTURE_WALL});
+			if (toRepair != undefined) {
+	            if (creep.repair(toRepair) == ERR_NOT_IN_RANGE) {
+		            creep.moveTo(toRepair);
+			    }
+			}
+			else {
+				builder.run(creep);
+			}
         }
         else {
             var source = creep.pos.findClosestByPath(FIND_SOURCES);
