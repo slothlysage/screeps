@@ -6,10 +6,7 @@
  * var mod = require('work');
  * mod.thing == 'a thing'; // true
  */
-var harvester = require('harvester');
-var upgrader = require('upgrader');
-var builder = require('builder');
-var repairer = require('repairer');
+var roles = require('roles');
 
 module.exports = {
 	run: function() {
@@ -20,17 +17,23 @@ module.exports = {
 				creep.drop(RESOURCE_ENERGY);
 			}
 			if (creep.memory.role == 'harvester') {
-				harvester.run(creep);
+				roles.harvester(creep);
 			}
 			else if (creep.memory.role == 'upgrader') {
-				upgrader.run(creep);
+				roles.upgrader(creep);
 			}
 			else if (creep.memory.role == 'builder') {
-				builder.run(creep);
+				roles.builder(creep);
 			}
 			else if (creep.memory.role == 'repairer') {
-				repairer.run(creep);
+				roles.repairer(creep);
 			}
+			//else if (creep.memory.role =='runner') {
+			//	runner.run(creep);
+			//}
+			//else if (creep.memory.role == 'miner') {
+			//	miner.run(creep);
+			//}
 		}
 	}
 };
