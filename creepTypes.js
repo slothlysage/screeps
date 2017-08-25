@@ -19,7 +19,7 @@ module.exports = function() {
 			body.push(MOVE);
 			body.push(MOVE);
 		}
-		return this.createCreep(body, undefined, { role: roleName, working: false });
+		return this.createCreep(body, undefined, { role: roleName, working: false, health: "full"});
 	};
 	StructureSpawn.prototype.createSlowMiner = 
 	function(energy, roleName) {
@@ -33,7 +33,7 @@ module.exports = function() {
 		for (let i = 0; i < numParts; i++) {
 			body.push(MOVE);
 		}
-		return this.createCreep(body, undefined, { role: roleName, working: false });
+		return this.createCreep(body, undefined, { role: roleName, working: false, health: "full"});
 	};
 	StructureSpawn.prototype.createBigWorker = 
 		function(energy, roleName) {
@@ -46,6 +46,6 @@ module.exports = function() {
 			for (let i = 0; i < numParts; i++) {
 				body.push(MOVE);
 			}
-			return this.createCreep(body, undefined, { role: roleName, working: false });
+			return this.createCreep(body, undefined, { role: roleName, working: false, health: "full"});
 		};
 };
