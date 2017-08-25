@@ -97,7 +97,7 @@ module.exports = {
         
         if (creep.memory.working == true) {
 			var toRepair = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-				filter: s => s.hits < s.hitsMax && s.structureType != STRUCTURE_WALL});
+				filter: s => (s.hits < 50000 && s.hits < s.hitsMax) && s.structureType != STRUCTURE_WALL});
 			var walls = creep.pos.findClosestByPath(FIND_STRUCTURES, {
 			    filter: s => s.structureType == STRUCTURE_WALL && s.hits < 20000});
 			if (toRepair != undefined) {
