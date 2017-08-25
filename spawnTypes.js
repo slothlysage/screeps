@@ -6,15 +6,17 @@ module.exports = {
         var minimum = { "harvesters" : 4,
                         "upgraders" : 1,
                         "builders" : 1,
-                        "repairers" : 1,
-                        "runners" : 0,
-                        "miners" : 0 }
-        var total = { "harvesters" : _.sum(Game.creeps, (c) => c.memory.role == 'harvester'),
-                        "upgraders" : _.sum(Game.creeps, (c) => c.memory.role == 'upgrader'),
-                        "builders" : _.sum(Game.creeps, (c) => c.memory.role == 'builder'),
-                        "repairers" : _.sum(Game.creeps, (c) => c.memory.role == 'repairer'),
-                        "runners" : _.sum(Game.creeps, (c) => c.memory.role == 'runner'),
-                        "miners" : _.sum(Game.creeps, (c) => c.memory.role == 'miner') }
+                        "repairers" : 2}
+        var total = []
+        for (let role in minimum) {
+            total[role] = _.sum(Game.creeps, (c) => c.memory.role == role.substring(0, role.length - 1));
+        }
+//for logging purposes
+        if (Game.time % 100 == 1) {   
+            for (let role in total) {
+                console.log('There are ' + total[role] + ' ' + role + '.')
+            }
+        }
 //available energy of Spawn1 *needs to be updated to all spawns*
         var maxEnergy = Game.spawns.Spawn1.room.energyCapacityAvailable;
         var availEnergy = Game.spawns.Spawn1.room.energyAvailable;
@@ -23,7 +25,7 @@ module.exports = {
 //harvester spawn
         if (total["harvesters"] < minimum["harvesters"]) {
             name = Game.spawns.Spawn1.createBigWorker(maxEnergy, 'harvester');
-            if (name == ERR_NOT_ENOUGH_ENERGY && total["harvesters"] < minimum["harvesters"] / 2) {
+            if (name == ERR_NOT_ENOUGH_ENERGY && total["harvesters"] == 0) {
                 name = Game.spawns.Spawn1.createBigWorker(availEnergy, 'harvester');
             }
             if (!(name < 0)) {
