@@ -113,5 +113,42 @@ module.exports = {
                 creep.moveTo(source);
             }
         }
+    },
+    runner: function(creep) {
+        if (creep.memory.working == true && creep.carry.energy == 0) {
+            creep.memory.working = false;
+        }
+        else if (creep.memory.working == false && creep.carry.energy == creep.carryCapacity) {
+            creep.memory.working = true;
+        }
+        if (creep.memory.working == true) {
+            var struct = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+				filter: (s) => (s.structureType == STRUCTURE_SPAWN ||
+				s.structureType == STRUCTURE_EXTENSION) &&
+				s.energy < s.energyCapacity });
+			if (struct != undefined) {
+				if (creep.transfer(struct, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+					creep.moveTo(struct);
+				}
+			}
+        }
+        else {
+			var pickup = creep.pos.findClosestByPath(FIND_DROPPED_RESOURCES);
+			if (pickup && creep.pos.getRangeTo(pickup)) {
+				if (creep.pickup(pickup) == ERR_NOT_IN_RANGE) {
+					creep.moveTo(pickup);
+				}
+			}
+			else {
+                var source = creep.pos.findClosestByPath(FIND_SOURCE);
+				if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
+					creep.moveTo(source);
+				}
+			}
+        }
+    }/*,
+    miner: function(creep) {
+
     }
+*/
 };
