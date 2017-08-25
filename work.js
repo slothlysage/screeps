@@ -15,6 +15,10 @@ module.exports = {
 	run: function() {
 		for (let name in Game.creeps) {
 			var creep = Game.creeps[name];
+			if (creep.ticksToLive == 1 && creep.carry.energy > 0) {
+				console.log(creep.name + " dropped their load.");
+				creep.drop(RESOURCE_ENERGY);
+			}
 			if (creep.memory.role == 'harvester') {
 				harvester.run(creep);
 			}

@@ -9,10 +9,6 @@
 
 module.exports = {
     run: function(creep) {
-		if (creep.ticksToLive == 1 && creep.carry.energy > 0) {
-			console.log(creep.name + " dropped their load.");
-			creep.drop(RESOURCE_ENERGY);
-		}
         if (creep.memory.working == true && creep.carry.energy == 0) {
             creep.memory.working = false;
         }

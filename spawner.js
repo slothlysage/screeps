@@ -7,7 +7,7 @@ module.exports = {
 		var minHarvesters = 4;
 		var minUpgraders = 1;
 		var minBuilders = 1;
-		var minRepairers = 2;
+		var minRepairers = 1;
 		//gets current count of every worker
 		var numHarvesters = _.sum(Game.creeps, (c) => c.memory.role == 'harvester')
 		var numUpgraders = _.sum(Game.creeps, (c) => c.memory.role == 'upgrader')
@@ -17,7 +17,8 @@ module.exports = {
 		var maxEnergy = Game.spawns.Spawn1.room.energyCapacityAvailable;
 		var availEnergy = Game.spawns.Spawn1.room.energyAvailable;
 		var name = undefined;
-		//code to spawn custom sized creeps based on available energy accessable by spawn prioritized by need and minimums
+//code to spawn custom sized creeps based on available energy accessable by spawn prioritized by need and minimums
+//harvester spawn
 		if (numHarvesters < minHarvesters) {
 			name = Game.spawns.Spawn1.createBigWorker(maxEnergy, 'harvester');
 			if (name == ERR_NOT_ENOUGH_ENERGY && numHarvesters < minHarvesters / 2) {
@@ -27,32 +28,37 @@ module.exports = {
 				console.log("New harvester created.");
 			}
 		}
+//upgrader spawn
 		else if (numUpgraders < minUpgraders) {
 			name = Game.spawns.Spawn1.createBigWorker(maxEnergy, 'upgrader');
 			if (!(name < 0)) {
 				console.log("New upgrader created.");
 			}
 		}
-		else if (numBuilders < minBuilders) {
-			name = Game.spawns.Spawn1.createBigWorker(maxEnergy, 'builder');
-			if (!(name < 0)) {
-				console.log("New builder created.");
-			}
-		}
+//repairer spawn
 		else if (numRepairers < minRepairers) {
 			name = Game.spawns.Spawn1.createBigWorker(maxEnergy, 'repairer');
 			if (!(name < 0)) {
 				console.log("New repairer created.");
 			}
 		}
-		else {
-			name = Game.spawns.Spawn1.createBigWorker(maxEnergy, 'repairer');
+//builder spawn
+		else if (numBuilders < minBuilders) {
+			name = Game.spawns.Spawn1.createBigWorker(maxEnergy, 'builder');
 			if (!(name < 0)) {
-				console.log("New repairer created.");
+				console.log("New builder created.");
+			}
+		}
+//overflow spawn currently:builder
+		else {
+			name = Game.spawns.Spawn1.createBigWorker(maxEnergy, 'builder');
+			if (!(name < 0)) {
+				console.log("New builder created.");
 			}
 		}
 		if (!(name < 0)) {
 			console.log("Hi! My name is " + name + ".");
+			console.log("H:" + numHarvesters + " U:" + numUpgraders + " B:" + numBuilders + " R:" + numRepairers);
 		}
 	}
 };

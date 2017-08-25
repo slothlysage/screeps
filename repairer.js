@@ -19,7 +19,7 @@ module.exports = {
         
         if (creep.memory.working == true) {
 			var toRepair = creep.pos.findClosestByPath(FIND_STRUCTURES,
-				{ filter: (s) => s.hit < s.hitsMax && s.structureType != STUCTURE_WALL});
+				{ filter: s => s.hits < s.hitsMax && s.structureType != STRUCTURE_WALL});
 			if (toRepair != undefined) {
 	            if (creep.repair(toRepair) == ERR_NOT_IN_RANGE) {
 		            creep.moveTo(toRepair);
