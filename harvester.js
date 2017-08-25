@@ -17,14 +17,24 @@ module.exports = {
         }
         
         if (creep.memory.working == true) {
-            if (creep.transfer(Game.spawns.Spawn1, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(Game.spawns.Spawn1);
-            }
+            var struct = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+				filter: (s) => (s.structureType == STRUCTURE_SPAWN ||
+				s.structureType == STRUCTURE_EXTENSION) &&
+				s.energy < s.energyCapacity });
+			if (struct != undefined) {
+				if (creep.transfer(struct, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+					creep.moveTo(struct);
+				}
+			}
         }
         else {
             var source = creep.pos.findClosestByPath(FIND_SOURCES);
             if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(source);
+                var road = creep.pos.lookFor(FIND_STRUCTURES);
+				if (road != undefined) {
+					creep.moveTo(source);
+				}
+				creep.build(STRUCTURE_ROAD);
             }
         }
     }

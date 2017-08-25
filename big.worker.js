@@ -7,17 +7,18 @@
  * mod.thing == 'a thing'; // true
  */
 
-module.exports = function () {
+module.exports = function() {
 	StructureSpawn.prototype.createBigWorker = 
-		function (energy, roleName) {
-		var numParts = Math.floor(energy / 200);
-		var body = [];
-		for (let i = 0; i < numParts; i++) {
-			body.push(WORK);
-			body.push(CARRY);
-		}
-		for (let i = 0; i < numParts; i++) {
-			body.push(MOVE);
-		}
-		return this.createCreep(body, undefined, { role: roleName, working: false });
+		function(energy, roleName) {
+			var numParts = Math.floor(energy / 200);
+			var body = [];
+			for (let i = 0; i < numParts; i++) {
+				body.push(WORK);
+				body.push(CARRY);
+			}
+			for (let i = 0; i < numParts; i++) {
+				body.push(MOVE);
+			}
+			return this.createCreep(body, undefined, { role: roleName, working: false });
+		};
 };
