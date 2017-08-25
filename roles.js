@@ -96,11 +96,18 @@ module.exports = {
         }
         
         if (creep.memory.working == true) {
-			var toRepair = creep.pos.findClosestByPath(FIND_STRUCTURES,
-				{ filter: s => s.hits < s.hitsMax && s.structureType != STRUCTURE_WALL});
+			var toRepair = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+				filter: s => s.hits < s.hitsMax && s.structureType != STRUCTURE_WALL});
+			var walls = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+			    filter: s => s.structureType == STRUCTURE_WALL && s.hits < 20000});
 			if (toRepair != undefined) {
 	            if (creep.repair(toRepair) == ERR_NOT_IN_RANGE) {
 		            creep.moveTo(toRepair);
+			    }
+			}
+			else if (walls != undefined) {
+			    if (creep.repair(walls) == ERR_NOT_IN_RANGE) {
+			        creep.moveTo(walls);
 			    }
 			}
 			else {
