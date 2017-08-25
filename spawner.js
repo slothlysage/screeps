@@ -20,7 +20,7 @@ module.exports = {
 		//code to spawn custom sized creeps based on available energy accessable by spawn prioritized by need and minimums
 		if (numHarvesters < minHarvesters) {
 			name = Game.spawns.Spawn1.createBigWorker(maxEnergy, 'harvester');
-			if (name == ERR_NOT_ENOUGH_ENERGY && numHarvesters == 0) {
+			if (name == ERR_NOT_ENOUGH_ENERGY && numHarvesters < minHarvesters / 2) {
 				name = Game.spawns.Spawn1.createBigWorker(availEnergy, 'harvester');
 			}
 			if (!(name < 0)) {

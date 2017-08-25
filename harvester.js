@@ -9,14 +9,17 @@
 
 module.exports = {
     run: function(creep) {
+		if (creep.ticksToLive == 1 && creep.carry.energy > 0) {
+			console.log(creep.name + " dropped their load.");
+			creep.drop(RESOURCE_ENERGY);
+		}
         if (creep.memory.working == true && creep.carry.energy == 0) {
             creep.memory.working = false;
         }
         else if (creep.memory.working == false && creep.carry.energy == creep.carryCapacity) {
             creep.memory.working = true;
         }
-        
-        if (creep.memory.working == true) {
+		if (creep.memory.working == true) {
             var struct = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
 				filter: (s) => (s.structureType == STRUCTURE_SPAWN ||
 				s.structureType == STRUCTURE_EXTENSION) &&
@@ -28,14 +31,18 @@ module.exports = {
 			}
         }
         else {
-            var source = creep.pos.findClosestByPath(FIND_SOURCES);
-            if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
-                var road = creep.pos.lookFor(FIND_STRUCTURES);
-				if (road != undefined) {
+			var pickup = creep.pos.findClosestByPath(FIND_DROPPED_RESOURCES);
+			var source = creep.pos.findClosestByPath(FIND_SOURCES);
+			if (pickup && creep.pos.getRangeTo(pickup) < (2 * creep.pos.getRangeTo(source))) {
+				if (creep.pickup(pickup) == ERR_NOT_IN_RANGE) {
+					creep.moveTo(pickup);
+				}
+			}
+			else {
+				if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
 					creep.moveTo(source);
 				}
-				creep.build(STRUCTURE_ROAD);
-            }
+			}
         }
     }
 };
