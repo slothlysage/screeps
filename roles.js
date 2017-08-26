@@ -1,4 +1,5 @@
 //All the roles in one file 
+var help = require('helper');
 
 module.exports = {
     harvester: function(creep) {
@@ -11,7 +12,8 @@ module.exports = {
 		if (creep.memory.working == true) {
             var struct = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
 				filter: (s) => (s.structureType == STRUCTURE_SPAWN ||
-				s.structureType == STRUCTURE_EXTENSION) &&
+				s.structureType == STRUCTURE_EXTENSION ||
+				s.structureType == STRUCTURE_TOWER) &&
 				s.energy < s.energyCapacity });
 			if (struct != undefined) {
 				if (creep.transfer(struct, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
@@ -153,9 +155,23 @@ module.exports = {
 				}
 			}
         }
-    }/*,
+    },
     miner: function(creep) {
-
+		if (creep.memory.working == true && creep.carry.energy == 0) {
+			creep.memory.working == false;
+		}
+		else if (creep.memory.working == false && creep.carry.energy == creep.carry.energyCapacity) {
+			creep.memory.working == true;
+		}
+		if (creep.memory.working == true) {
+			creep.drop.energy;
+		}
+		else {
+			var sources = find(FIND_SOURCES);
+			if (creep.harvest(source[creep.memory.source]) == ERR_NOT_IN_RANGE) {
+				creep.moveTo(source[creep.memory.source]);
+				help.autoRoad(creep);
+			}
+		}
     }
-*/
 };
