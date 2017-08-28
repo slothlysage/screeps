@@ -1,7 +1,7 @@
 require ('creepTypes')();
 
 module.exports = {
-    
+
     basic: function() {
         var minimum = { "harvesters" : 3,
                         "upgraders" : 1,
@@ -12,7 +12,7 @@ module.exports = {
             total[role] = _.sum(Game.creeps, (c) => c.memory.role == role.substring(0, role.length - 1));
         }
 //for logging purposes
-        if (Game.time % 60 == 1) {   
+        if (Game.time % 60 == 1) {
             for (let role in total) {
                 console.log('There are ' + total[role] + ' ' + role + '.')
             }
@@ -67,14 +67,16 @@ module.exports = {
 		experimental: function() {
 		var minimum = { "harvesters" : 4,
                         "upgraders" : 1,
-                        "builders" : 1,
-                        "repairers" : 2}
+                        "builders" : 0,
+                        "repairers" : 1,
+                        "ldharvesters" : 1}
+    var home = 'W7N3';
         var total = []
         for (let role in minimum) {
             total[role] = _.sum(Game.creeps, (c) => c.memory.role == role.substring(0, role.length - 1));
         }
 //for logging purposes
-        if (Game.time % 60 == 1) {   
+        if (Game.time % 60 == 1) {
             for (let role in total) {
                 console.log('There are ' + total[role] + ' ' + role + '.')
             }
@@ -91,9 +93,6 @@ module.exports = {
             if (name == ERR_NOT_ENOUGH_ENERGY && total["harvesters"] == 0) {
                 name = Game.spawns.Spawn1.createBigWorker(availEnergy, 'harvester');
             }
-			else if (name == ERR_NOT_ENOUGH_ENERGY && total["harvesters"] < minimum["harvesters"] - 1) {
-				name = Game.spawns.Spawn1.createBigWorker(portionEnergy, 'harvester');
-			}
             if (!(name < 0)) {
                 console.log("New harvester created.");
             }
@@ -105,9 +104,16 @@ module.exports = {
                 console.log("New upgrader created.");
             }
         }
+//ldharvester spawn
+        else if (total["ldharvesters"] < minimum["ldharvesters"]) {
+            name = Game.spawns.Spawn1.createLdHarvester(maxEnergy, 6, home, 'W7N4', 0);
+            if (!(name < 0)) {
+                console.log("New ldharvester created.");
+            }
+        }
 //repairer spawn
         else if (total["repairers"] < minimum["repairers"]) {
-            name = Game.spawns.Spawn1.createBigWorker(portionEnergy, 'repairer');
+            name = Game.spawns.Spawn1.createBigWorker(maxEnergy, 'repairer');
 			if (!(name < 0)) {
                 console.log("New repairer created.");
             }

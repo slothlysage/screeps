@@ -48,6 +48,9 @@ module.exports = {
 				else if (creep.memory.role == 'repairer') {
 					roles.repairer(creep);
 				}
+				else if (creep.memory.role == 'ldharvester') {
+					roles.ldharvester(creep);
+				}
 				//else if (creep.memory.role =='runner') {
 				//	runner.run(creep);
 				//}

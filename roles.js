@@ -1,4 +1,4 @@
-//All the roles in one file 
+//All the roles in one file
 var help = require('helper');
 
 module.exports = {
@@ -23,7 +23,7 @@ module.exports = {
         }
         else {
 			var pickup = creep.pos.findClosestByPath(FIND_DROPPED_RESOURCES);
-			var source = creep.pos.findClosestByPath(FIND_SOURCES);
+			var source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
 			if (pickup && creep.pos.getRangeTo(pickup) < (2 * creep.pos.getRangeTo(source))) {
 				if (creep.pickup(pickup) == ERR_NOT_IN_RANGE) {
 					creep.moveTo(pickup);
@@ -70,7 +70,7 @@ module.exports = {
         else if (creep.memory.working == false && creep.carry.energy == creep.carryCapacity) {
             creep.memory.working = true;
         }
-        
+
         if (creep.memory.working == true) {
 			var construction = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
 			if (construction != undefined) {
@@ -96,12 +96,12 @@ module.exports = {
         else if (creep.memory.working == false && creep.carry.energy == creep.carryCapacity) {
             creep.memory.working = true;
         }
-        
+
         if (creep.memory.working == true) {
 			var toRepair = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-				filter: s => (s.hits < 50000 && s.hits < s.hitsMax) && s.structureType != STRUCTURE_WALL});
+				filter: s => (s.hits < 100000 && s.hits < s.hitsMax) && s.structureType != STRUCTURE_WALL});
 			var walls = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-			    filter: s => s.structureType == STRUCTURE_WALL && s.hits < 20000});
+			    filter: s => s.structureType == STRUCTURE_WALL && s.hits < 75000});
 			if (toRepair != undefined) {
 	            if (creep.repair(toRepair) == ERR_NOT_IN_RANGE) {
 		            creep.moveTo(toRepair);
@@ -158,10 +158,10 @@ module.exports = {
     },
     miner: function(creep) {
 		if (creep.memory.working == true && creep.carry.energy == 0) {
-			creep.memory.working == false;
+			creep.memory.working = false;
 		}
 		else if (creep.memory.working == false && creep.carry.energy == creep.carry.energyCapacity) {
-			creep.memory.working == true;
+			creep.memory.working = true;
 		}
 		if (creep.memory.working == true) {
 			creep.drop.energy;
@@ -173,5 +173,44 @@ module.exports = {
 				help.autoRoad(creep);
 			}
 		}
+  },
+    ldharvester: function(creep) {
+      if (creep.memory.working == true && creep.carry.energy == 0) {
+        creep.memory.working = false;
+      }
+      else if (creep.memory.working == false && creep.carry.energy == creep.carryCapacity) {
+        creep.memory.working = true;
+      }
+		  if (creep.memory.working == true) {
+        if (creep.room.name == creep.memory.home) {
+          var struct = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+				     filter: (s) => (s.structureType == STRUCTURE_SPAWN ||
+				     s.structureType == STRUCTURE_EXTENSION ||
+				     s.structureType == STRUCTURE_TOWER) &&
+				     s.energy < s.energyCapacity });
+			    if (struct != undefined) {
+				        if (creep.transfer(struct, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+					             creep.moveTo(struct);
+				        }
+			    }
+        }
+        else {
+          var exit = creep.room.findExitTo(creep.memory.home);
+          creep.moveTo(creep.pos.findClosestByPath(exit));
+        }
+      }
+        else {
+          if (creep.room.name == creep.memory.target) {
+			var source = creep.pos.findClosestByPath(FIND_SOURCES);
+        if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
+					creep.moveTo(source);
+				}
+			}
+      else {
+        var exit = creep.room.findExitTo(creep.memory.target);
+        creep.moveTo(creep.pos.findClosestByPath(exit));
+      }
+        }
+
     }
 };
