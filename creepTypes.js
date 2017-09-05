@@ -69,5 +69,9 @@ module.exports = function() {
 				body.push(MOVE);
 			}
 			return this.createCreep(body, undefined, { role: roleName, working: false, health: "full"});
-		};
+	};
+	StructureSpawn.prototype.createClaimer =
+	    function(target) {
+	        return this.createCreep([MOVE, CLAIM], undefined, {role:'claimer', target: target});
+	};
 };

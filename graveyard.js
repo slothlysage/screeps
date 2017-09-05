@@ -11,9 +11,17 @@ module.exports = {
 	run: function() {
 		for (let name in Memory.creeps) {
 			if (Game.creeps[name] == undefined) {
-				console.log(name + " has passed away...")
+				console.log(name + " was forgotten...")
 				delete Memory.creeps[name];
 			}
+		}
+		for (let name in Game.creeps) {
+		    var creep = Game.creeps[name];
+	        if (creep.ticksToLive - 25 < creep.pos.getRangeTo(Game.spawns.Spawn1) && 
+	        creep.memory.role != 'ldharvester' &&
+	        creep.memory.role != 'claimer') {
+	            creep.memory.role = 'walkingdead';
+		    }
 		}
 	}
 };
